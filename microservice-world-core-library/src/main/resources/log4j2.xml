@@ -1,0 +1,15 @@
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%t] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"/>
+        </Console>
+        <CustomLogAppender name="CustomLogAppender"/>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="CustomLogAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

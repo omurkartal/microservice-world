@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  microservice-world-movie-catalog-service:
+    image: omurka/microservice-world-movie-catalog-service
+    container_name: microservice-world-movie-catalog-service
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 768M
+        reservations:
+          cpus: '0.10'
+          memory: 256M
+    ports:
+      - 20001:80
+    environment:
+      - PORT=80
+      - EUREKA_SERVER_URL=http://microservice-world-discovery-server-eureka/eureka
+    networks:
+      - microservice-world-network
+
+  microservice-world-movie-info-service:
+    image: omurka/microservice-world-movie-info-service
+    container_name: microservice-world-movie-info-service
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 768M
+        reservations:
+          cpus: '0.10'
+          memory: 256M
+    ports:
+      - 20002:80
+    environment:
+      - PORT=80
+      - EUREKA_SERVER_URL=http://microservice-world-discovery-server-eureka/eureka
+    networks:
+      - microservice-world-network
+
+  microservice-world-movie-rating-service:
+    image: omurka/microservice-world-movie-rating-service
+    container_name: microservice-world-movie-rating-service
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 768M
+        reservations:
+          cpus: '0.10'
+          memory: 256M
+    ports:
+      - 20003:80
+    environment:
+      - PORT=80
+      - EUREKA_SERVER_URL=http://microservice-world-discovery-server-eureka/eureka
+    networks:
+      - microservice-world-network
+
+networks:
+  microservice-world-network:
+    name: microservice-world-network

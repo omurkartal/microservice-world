@@ -1,0 +1,80 @@
+version: "3.8"
+
+services:
+  microservice-world-discovery-server-eureka:
+    image: omurka/microservice-world-discovery-server-eureka
+    container_name: microservice-world-discovery-server-eureka
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 768M
+        reservations:
+          cpus: '0.10'
+          memory: 512M
+    hostname: discovery-server
+    ports:
+      - 10001:80
+    environment:
+      - PORT=80
+    networks:
+      - microservice-world-network
+
+  microservice-world-config-server:
+    image: omurka/microservice-world-config-server
+    container_name: microservice-world-config-server
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 768M
+        reservations:
+          cpus: '0.10'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 5
+        window: 600s
+    hostname: config-server
+    ports:
+      - 10002:80
+    environment:
+      - PORT=80
+      - EUREKA_SERVER_URL=http://microservice-world-discovery-server-eureka/eureka
+    depends_on:
+      - microservice-world-discovery-server-eureka
+    networks:
+      - microservice-world-network
+
+  microservice-world-api-gateway:
+    image: omurka/microservice-world-api-gateway
+    container_name: microservice-world-api-gateway
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 768M
+        reservations:
+          cpus: '0.10'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 5
+        window: 600s
+    hostname: api-gateway
+    ports:
+      - 10003:80
+    environment:
+      - PORT=80
+      - EUREKA_SERVER_URL=http://microservice-world-discovery-server-eureka/eureka
+    depends_on:
+      - microservice-world-discovery-server-eureka
+      - microservice-world-config-server
+    networks:
+      - microservice-world-network
+
+networks:
+  microservice-world-network:
+    name: microservice-world-network
